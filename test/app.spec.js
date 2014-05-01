@@ -18,10 +18,11 @@ describe('site watcher', function() {
         },
         cleanup: function(items, cb) {
           items.should.eql(res);
-          cb(null);
+          cb(null, items);
         }
-      }, function(err) {
+      }, function(err, items) {
         w.stop();
+        items.should.eql([1, 2, 3]);
         should.not.exist(err);
         done();
       });
@@ -43,10 +44,11 @@ describe('site watcher', function() {
         },
         cleanup: function(items, cb) {
           items.should.eql([1, 2, 3]);
-          cb(null);
+          cb(null, items);
         }
-      }, function(err) {
+      }, function(err, items) {
         should.not.exist(err);
+        items.should.eql([1, 2, 3]);
         counter++;
         if (counter === 2) {
           res.should.eql([1, 2, 3, 1, 2, 3]);
@@ -60,9 +62,12 @@ describe('site watcher', function() {
   it('should fail getting data', function(done) {
     var w = new sw(-1,
       '* * * * * *', {},
-      function(err) {
+      function(err, items) {
         w.stop();
         err.should.containEql('Get data failed:');
+        should.exist(items);
+        items.should.eql([]);
+        items.should.have.length(0);
         done();
       });
     w.start();
@@ -74,9 +79,12 @@ describe('site watcher', function() {
         parse: function(data, cb) {
           cb('intended');
         }
-      }, function(err) {
+      }, function(err, items) {
         w.stop();
         err.should.equal('Parse data failed: intended');
+        should.exist(items);
+        items.should.eql([]);
+        items.should.have.length(0);
         done();
       });
     w.start();
@@ -92,9 +100,12 @@ describe('site watcher', function() {
         save: function(item, cb) {
           cb('intended');
         }
-      }, function(err) {
+      }, function(err, items) {
         w.stop();
         err.should.equal('Iteration failed: intended');
+        should.exist(items);
+        items.should.eql([]);
+        items.should.have.length(0);
         done();
       });
     w.start();
