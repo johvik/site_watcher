@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test';
 
+var server = require('./server');
 var should = require('should');
 
 var sw = require('../').SiteWatcher;
@@ -7,7 +8,7 @@ var sw = require('../').SiteWatcher;
 describe('site watcher', function() {
   it('should run', function(done) {
     var res = [];
-    var w = new sw('http://www.google.com',
+    var w = new sw(server.url,
       '* * * * * *', {
         parse: function(data, cb) {
           cb(null, [1, 2, 3]);
@@ -33,7 +34,7 @@ describe('site watcher', function() {
     this.timeout(5000);
     var res = [];
     var counter = 0;
-    var w = new sw('http://www.google.com',
+    var w = new sw(server.url,
       '* * * * * *', {
         parse: function(data, cb) {
           cb(null, [1, 2, 3]);
@@ -74,7 +75,7 @@ describe('site watcher', function() {
   });
 
   it('should fail parsing', function(done) {
-    var w = new sw('http://www.google.com',
+    var w = new sw(server.url,
       '* * * * * *', {
         parse: function(data, cb) {
           cb('intended');
@@ -92,7 +93,7 @@ describe('site watcher', function() {
 
   it('should fail in iteration', function(done) {
     var res = [];
-    var w = new sw('http://www.google.com',
+    var w = new sw(server.url,
       '* * * * * *', {
         parse: function(data, cb) {
           cb(null, [1]);
