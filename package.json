@@ -1,6 +1,6 @@
 {
   "name": "site_watcher",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Watches a site for specific changes",
   "author": "johvik",
   "repository": {

@@ -65,7 +65,21 @@ describe('site watcher', function() {
       '* * * * * *', {},
       function(err, items) {
         w.stop();
-        err.should.containEql('Get data failed:');
+        err.should.containEql('Get data failed: Get error: ');
+        should.exist(items);
+        items.should.eql([]);
+        items.should.have.length(0);
+        done();
+      });
+    w.start();
+  });
+
+  it('should fail response code', function(done) {
+    var w = new sw(server.url + '/404',
+      '* * * * * *', {},
+      function(err, items) {
+        w.stop();
+        err.should.equal('Get data failed: Wrong status: 404');
         should.exist(items);
         items.should.eql([]);
         items.should.have.length(0);
